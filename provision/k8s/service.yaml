@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: viet-service
+spec:
+  selector:
+    app: viet-app
+  ports:
+    - protocol: TCP
+      port: 9090
+      targetPort: 9090
+      name: goport
+  type: LoadBalancer
