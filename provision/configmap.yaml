@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: viet-env-config
+  namespace: default
+data:
+  GO_MONGO_DATABASE__PROTOCOL: mongodb+srv
+  GO_MONGO_DATABASE__HOST: cluster0-lawwu.gcp.mongodb.net
+  GO_MONGO_DATABASE__USER: letrannhatviet
+  GO_MONGO_DATABASE__PASSWORD: asdasd 
+  GO_MONGO_DATABASE__NAME: golang

@@ -5,22 +5,43 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/letrannhatviet/my_framework/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-const (
-	dbName = "golang"
+var (
+	dbName = config.Config.MongoDB.Name
 	dbCol  = "Student"
 )
 
 var Client *mongo.Client
-var collection = Client.Database(dbName).Collection(dbCol)
 
 func init() {
-	fmt.Println("tesst")
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb://mongoadmin:secret@localhost:27017"))
+	connectionString := ""
+	if config.Config.MongoDB.Protocol == "mongodb" {
+		connectionString = fmt.Sprintf(
+			"%s://%s:%s@%s:%s",
+			config.Config.MongoDB.Protocol,
+			config.Config.MongoDB.User,
+			config.Config.MongoDB.Password,
+			config.Config.MongoDB.Host,
+			config.Config.MongoDB.Port,
+		)
+	} else {
+		connectionString = fmt.Sprintf(
+			"%s://%s:%s@%s",
+			config.Config.MongoDB.Protocol,
+			config.Config.MongoDB.User,
+			config.Config.MongoDB.Password,
+			config.Config.MongoDB.Host,
+		)
+	}
+	connectionString = "mongodb+srv://mongoadmin:secret1234@cluster0-xxyrd.gcp.mongodb.net"
+
+	fmt.Println(connectionString)
+	client, err := mongo.NewClient(options.Client().ApplyURI(connectionString))
 	if err != nil {
 		panic(err)
 	}

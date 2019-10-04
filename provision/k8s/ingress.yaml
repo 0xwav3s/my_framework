@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: APP_NAME-ingress
+ annotations:
+ labels:
+   app: APP_NAME-app
+spec:
+ rules:
+   - host: go3008.info
+     http:
+       paths:
+         - path: /api/v1/public/student
+           backend:
+             serviceName: APP_NAME-svc
+             servicePort: 9090
+         - path: /api/v1/staff/student
+           backend:
+             serviceName: APP_NAME-svc
+             servicePort: 9090
+---
+

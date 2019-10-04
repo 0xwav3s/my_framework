@@ -2,38 +2,58 @@ package config
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/viper"
 )
 
+// Schema Config struct
 type Schema struct {
 	PostgresDB struct {
-		Username string
-		Password string
-		Host     string
-		Port     int
-		Debug    bool
-	}
+		User     string `mapstructure:"user"`
+		Password string `mapstructure:"password"`
+		Host     string `mapstructure:"host"`
+		Port     int    `mapstructure:"port"`
+		Debug    bool   `mapstructure:"debug"`
+		Database string `mapstructure:"name"`
+	} `mapstructure:"go_postgres_database"`
+
+	MongoDB struct {
+		Protocol string `mapstructure:"protocol"`
+		User     string `mapstructure:"user"`
+		Password string `mapstructure:"password"`
+		Host     string `mapstructure:"host"`
+		Port     string `mapstructure:"port"`
+		Name     string `mapstructure:"name"`
+	} `mapstructure:"go_mongo_database"`
 
 	Paging struct {
-		Limit string
-	}
+		Limit string `mapstructure:"limit"`
+	} `mapstructure:"paging"`
 
 	Encryption struct {
-		EncryptionKey string
-		EncryptSecret string
-	}
+		EncriptionKey    string `mapstructure:"oid_key"`
+		EncriptionSecret string `mapstructure:"jwt_secret"`
+	} `mapstructure:"encription"`
 }
 
-var Config Schema
+var (
+	Config Schema
+)
 
+// Init config
 func init() {
-	viper.SetConfigName("config")        // name of config file (without extension)
-	viper.AddConfigPath("/etc/appname/") // path to look for the config file in
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig() // Find and read the config file
-	if err != nil {             // Handle errors reading the config file
-		panic(fmt.Errorf("Fatal error config file: %s \n", err))
+	viper.AddConfigPath("./config")
+	viper.SetConfigName("config")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "__"))
+	viper.AutomaticEnv()
+	err := viper.ReadInConfig()
+	if err != nil {
+		panic(err)
 	}
-	viper.Unmarshal(&Config)
+
+	err = viper.Unmarshal(&Config)
+	if err != nil {
+		fmt.Printf("Unable to decode into config struct, %v", err)
+	}
 }

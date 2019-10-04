@@ -8,6 +8,14 @@ go_postgres_database:
 paging:
   limit: 100
 
+go_mongo_database:
+  protocol: mongodb
+  host: localhost
+  user: mongoadmin
+  password: secret
+  port: 27017
+  name: golang
+
 encryption:
   oid_key: ghnexp0123456789
   jwt_secret: secret

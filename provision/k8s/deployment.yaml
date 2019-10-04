@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: APP_NAME-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: APP_NAME-app
+  template:
+    metadata:
+      labels:
+        app: APP_NAME-app
+    spec:
+      containers:
+        - name: APP_NAME-app
+          image: protemon/APP_NAME
+          ports:
+            - containerPort: 9090
+              name: web
+          envFrom:
+            - configMapRef:
+                name: viet-env-config
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "50m"
+            limits:
+              memory: "750Mi"
+              cpu: "750m"
+---
